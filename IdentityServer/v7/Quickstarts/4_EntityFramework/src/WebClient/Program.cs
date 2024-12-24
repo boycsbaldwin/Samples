@@ -22,9 +22,10 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("openid");
         options.Scope.Add("profile");
         options.Scope.Add("api1");
-        options.Scope.Add("offline_access");
-        options.Scope.Add("verification");
+//        options.Scope.Add("offline_access");
+//        options.Scope.Add("verification");
         options.ClaimActions.MapJsonKey("email_verified", "email_verified");
+        options.ClaimActions.MapJsonKey("favorite_color", "favorite_color");
         options.GetClaimsFromUserInfoEndpoint = true;
 
         options.MapInboundClaims = false; // Don't rename claim types

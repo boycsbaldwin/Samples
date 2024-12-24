@@ -55,17 +55,17 @@ internal static class HostingExtensions
         builder.Services.AddRazorPages();
 
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
-        const string connectionString = @"Data Source=Duende.IdentityServer.Quickstart.EntityFramework.db";
+        const string connectionString = @"Server=localhost,1433;Initial Catalog=Duende;Persist Security Info=False;User ID=sa;Password=B0ycs010;TrustServerCertificate=True;Connection Timeout=30;";
 
         builder.Services.AddIdentityServer()
             .AddConfigurationStore(options =>
             {
-                options.ConfigureDbContext = b => b.UseSqlite(connectionString,
+                options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
                     sql => sql.MigrationsAssembly(migrationsAssembly));
             })
             .AddOperationalStore(options =>
             {
-                options.ConfigureDbContext = b => b.UseSqlite(connectionString,
+                options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
                     sql => sql.MigrationsAssembly(migrationsAssembly));
             })
             .AddTestUsers(TestUsers.Users);
@@ -84,7 +84,7 @@ internal static class HostingExtensions
                 options.ClientSecret = googleClientSecret;
             });
         }
-            
+
         authenticationBuilder.AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
             {
                 options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -105,11 +105,11 @@ internal static class HostingExtensions
 
         return builder.Build();
     }
-    
+
     public static WebApplication ConfigurePipeline(this WebApplication app)
-    { 
+    {
         app.UseSerilogRequestLogging();
-    
+
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -119,11 +119,16 @@ internal static class HostingExtensions
 
         app.UseStaticFiles();
         app.UseRouting();
-            
+
         app.UseIdentityServer();
 
         app.UseAuthorization();
         app.MapRazorPages().RequireAuthorization();
+
+        app.UseCookiePolicy(new CookiePolicyOptions()
+        {
+            MinimumSameSitePolicy = SameSiteMode.Lax
+        });
 
         return app;
     }
