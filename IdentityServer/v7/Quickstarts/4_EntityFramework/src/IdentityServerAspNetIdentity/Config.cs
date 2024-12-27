@@ -44,7 +44,7 @@ public static class Config
             // interactive client using code flow + pkce
             new Client
             {
-                ClientId = "web",
+                ClientId = "originalweb",
                 ClientSecrets = { new Secret("secret".Sha256()) },
 
                 AllowedGrantTypes = GrantTypes.Code,
@@ -52,6 +52,22 @@ public static class Config
                 RedirectUris = { "https://localhost:5002/signin-oidc" },
                 FrontChannelLogoutUri = "https://localhost:5002/signout-oidc",
                 PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                AllowOfflineAccess = true,
+                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "api1", "onboarding" }
+            },
+            new Client
+            {
+                ClientId = "web",
+//                ClientSecrets = { new Secret("secret".Sha256()) },
+                RequireClientSecret = false,
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                RedirectUris = { "https://localhost:4444" },//"/signin-oidc" },
+                FrontChannelLogoutUri = "https://localhost:4444/signout-oidc",
+                PostLogoutRedirectUris = { "https://localhost:4444/signout-callback-oidc" },
+                AllowedCorsOrigins = { "https://localhost:4444" },
 
                 AllowOfflineAccess = true,
                 AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "api1", "onboarding" }

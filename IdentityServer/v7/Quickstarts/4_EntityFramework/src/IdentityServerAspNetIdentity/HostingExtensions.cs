@@ -144,6 +144,14 @@ internal static class HostingExtensions
                 options.ClientSecret = "copy client secret from Google here";
             });
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowVueApp", a => a.WithOrigins("https://localhost:4444")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
+        });
+
         return builder.Build();
     }
 
@@ -162,6 +170,14 @@ internal static class HostingExtensions
         app.UseRouting();
         app.UseIdentityServer();
         app.UseAuthorization();
+
+        app.UseCors("AllowVueApp");
+
+        app.Map("/v2.0/.well-known/openid-configuration", context =>
+        {
+            context.Response.Redirect("/.well-known/openid-configuration", permanent: false);
+            return Task.CompletedTask;
+        });
 
         app.MapRazorPages()
             .RequireAuthorization();

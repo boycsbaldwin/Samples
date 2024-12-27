@@ -120,8 +120,10 @@ internal static class HostingExtensions
         app.UseStaticFiles();
         app.UseRouting();
 
-        app.UseIdentityServer();
+        app.UseCors("AllowSpecificOrigin");
 
+        app.UseIdentityServer();
+        
         app.UseAuthorization();
         app.MapRazorPages().RequireAuthorization();
 
