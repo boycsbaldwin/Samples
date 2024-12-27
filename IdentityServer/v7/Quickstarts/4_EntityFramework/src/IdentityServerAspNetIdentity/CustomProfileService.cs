@@ -27,6 +27,8 @@ public class CustomProfileService : ProfileService<ApplicationUser>
             id.AddClaim(new Claim("favorite_color", user.FavoriteColor));
         }
 
+        id.AddClaim(new Claim("onboarding", "abc123"));
+
         context.AddRequestedClaims(principal.Claims);
     }
 }

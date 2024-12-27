@@ -14,9 +14,8 @@ public static class Config
             return new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                profile
-//            new IdentityResources.Profile(),
-//            new IdentityResource("color", "Colour Preferences", ["favorite_color"])
+                profile,
+                new IdentityResource("onboarding", "Onboarding", new[] { "onboarding" })
             };
         }
     }
@@ -55,7 +54,7 @@ public static class Config
                 PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,
-                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "api1" }
+                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "api1", "onboarding" }
             },
         };
 }
